@@ -1,0 +1,39 @@
+name: Variables Scope Demonstration
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  MY_WORKFLOW_VARIABLE: "This is a workflow-level variable"
+
+jobs:
+  demonstrate-scopes:
+    runs-on: ubuntu-latest
+    
+    env:
+      MY_JOB_VARIABLE: "This is a job-level variable"
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Display variables (step 1)
+        run: |
+          echo "Workflow variable: $MY_WORKFLOW_VARIABLE"
+          echo "Job variable: $MY_JOB_VARIABLE"
+      
+      - name: Display variables (step 2 with step-level variable)
+        env:
+          MY_STEP_VARIABLE: "This is a step-level variable"
+        run: |
+          echo "Workflow variable: $MY_WORKFLOW_VARIABLE"
+          echo "Job variable: $MY_JOB_VARIABLE"
+          echo "Step variable: $MY_STEP_VARIABLE"
+      
+      - name: Display variables (step 3 - no step variable)
+        run: |
+          echo "Workflow variable: $MY_WORKFLOW_VARIABLE"
+          echo "Job variable: $MY_JOB_VARIABLE"
+          echo "Step variable (should be empty): $MY_STEP_VARIABLE"
